@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Image from "next/image";
 
@@ -21,13 +21,17 @@ const buttons: Button[] = [
     { value: "dancing", text: "Dancing" },
     { value: "gaming", text: "Gaming" },
 ];
-  
-const MyComponent = () => {
-  const [activeButtons, setActiveButtons] = useState<Record<string, boolean>>({});
+
+interface ButtonProps {
+  handleHobbySelection: (hobby: string) => void;
+  selectedHobbies: Record<string, boolean>;
+}
+
+const Buttons: React.FC<ButtonProps> = ({ handleHobbySelection, selectedHobbies }) => {
   const appRouter = useRouter();
 
   const handleClick = (button: Button) => {
-    setActiveButtons(prevState => ({ ...prevState, [button.value]: !prevState[button.value] }));
+    handleHobbySelection(button.value);
   };
 
   return (
@@ -48,11 +52,11 @@ const MyComponent = () => {
           .
         </p>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+      <div className="flex flex-wrap justify-between mt-5">
         {buttons.map((button, index) => (
           <button
             key={index}
-            className={`flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors duration-300 mb-5 ${activeButtons[button.value] ? 'bg-black text-white' : ''}`}
+            className={`flex items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors duration-300 mb-5 ${selectedHobbies[button.value] ? 'bg-black text-white' : ''}`}
             onClick={() => handleClick(button)}
           >
             <p>{button.text}</p>
@@ -63,4 +67,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default Buttons;
