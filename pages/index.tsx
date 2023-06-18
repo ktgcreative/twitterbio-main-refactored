@@ -1,32 +1,34 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import { VibeType } from "../components/DropDown";
-import Footer from "../components/Footer";
+import { Toaster } from "react-hot-toast";
+import { VibeType } from "../components/dropdown/DropDown";
+import Footer from "../components/footer/Footer";
 import Github from "../components/GitHub";
-import Header from "../components/Header";
-import BioInput from "../components/BioInput";
+import Header from "../components/header/Header";
+import BioInput from "../components/bio/BioInput";
 import GenerateButton from "../components/GenerateButton";
-import GeneratedBiosDisplay from "../components/GeneratedBiosDisplay";
-import VibeSelector from "../components/VibeSelector";
+import GeneratedBiosDisplay from "../components/bio/GeneratedBiosDisplay";
+import VibeSelector from "../components/selector/VibeSelector";
 import { useGenerateBio } from '../hooks/useGenerateBio';
-import HeroSection from "../components/HeroSection";
+import HeroSection from "../components/header/HeroSection";
+import Buttons from '../components/selector/SelectButtons';
 
+// Main component for the Home page
 const Home: NextPage = () => {
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const { loading, generatedBios, generateBio } = useGenerateBio();
-
   const bioRef = useRef<null | HTMLDivElement>(null);
 
+  // Function to scroll to the generated bios section
   const scrollToBios = () => {
     if (bioRef.current !== null) {
       bioRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  // Function to generate the prompt for the bio generation
   const generatePrompt = (vibe: VibeType, bio: string) => {
     return `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${vibe === "Funny"
       ? "Make sure there is a joke in there and it's a little ridiculous."
@@ -36,13 +38,14 @@ const Home: NextPage = () => {
       }`;
   };
 
+  // Function to handle the form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const prompt = generatePrompt(vibe, bio);
     generateBio(prompt);
   };
 
-  // Call scrollToBios when generatedBios updates
+  // Effect to scroll to the bios section when the generatedBios state updates
   useEffect(() => {
     if (generatedBios) {
       scrollToBios();
@@ -74,18 +77,17 @@ const Home: NextPage = () => {
 
         <div className="max-w-xl w-full">
           <BioInput bio={bio} setBio={setBio} />
-
+          <Buttons />
           <VibeSelector vibe={vibe} setVibe={setVibe} />
 
           <GenerateButton loading={loading} onClick={handleSubmit} />
         </div>
 
-
         <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 2000 }} />
 
         <GeneratedBiosDisplay generatedBios={generatedBios} bioRef={bioRef} />
-
       </main>
+
       <Footer />
     </div>
   );

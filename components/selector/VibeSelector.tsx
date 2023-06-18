@@ -1,6 +1,6 @@
 // VibeSelector.tsx
 import Image from "next/image";
-import DropDown, { VibeType } from "./DropDown";
+import DropDown, { VibeType } from "../dropdown/DropDown";
 
 interface VibeSelectorProps {
   vibe: VibeType;

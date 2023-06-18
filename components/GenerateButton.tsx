@@ -1,6 +1,6 @@
 // GenerateButton.tsx
 import { MouseEvent } from 'react';
-import LoadingDots from "../components/LoadingDots";
+import LoadingDots from "./loading/LoadingDots";
 
 type GenerateButtonProps = {
   loading: boolean;
